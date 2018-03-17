@@ -48,14 +48,7 @@ class OC_User_MySQL extends \OCA\user_external\Base{
 	 * @return true/false
 	 */
 	public function checkPassword($uid, $password) {
-		if (false === array_search($this->protocol, stream_get_wrappers())) {
-			OCP\Util::writeLog(
-				'user_external',
-				'ERROR: Stream wrapper not available: ' . $this->protocol, OCP\Util::ERROR
-			);
-			return false;
-		}
-		$sth = $pdo->prepare('SELECT count(*) as cnt FROM ' . $this->table . ' WHERE ' . $this->col_user . ' = :user AND ' . $this->col_pass . ' = :pass');
+		$sth = $this->pdo->prepare('SELECT count(*) as cnt FROM ' . $this->table . ' WHERE ' . $this->col_user . ' = :user AND ' . $this->col_pass . ' = :pass');
 		$sth->bindParam(':user', $uid);
 		$sth->bindParam(':pass', $password);
 		$sth->execute();
